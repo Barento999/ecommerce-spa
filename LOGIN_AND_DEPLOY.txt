@@ -1,0 +1,80 @@
+═══════════════════════════════════════════════════════════
+  🔐 FIREBASE LOGIN REQUIRED
+═══════════════════════════════════════════════════════════
+
+ERROR: Failed to authenticate
+
+SOLUTION: Login to Firebase first!
+
+═══════════════════════════════════════════════════════════
+
+RUN THESE COMMANDS IN ORDER:
+
+STEP 1: Login to Firebase
+────────────────────────────────────
+firebase login
+
+This will:
+• Open your browser
+• Ask you to login with Google
+• Grant Firebase CLI access
+• Return to terminal when done
+
+STEP 2: Deploy Indexes
+────────────────────────────────────
+firebase deploy --only firestore:indexes
+
+This will:
+• Create all required indexes
+• Take 2-5 minutes to build
+• Send you an email when ready
+
+STEP 3: Deploy Rules (Optional but Recommended)
+────────────────────────────────────
+firebase deploy --only firestore:rules
+
+This ensures proper security.
+
+═══════════════════════════════════════════════════════════
+
+FULL COMMAND SEQUENCE:
+
+firebase login
+firebase deploy --only firestore:indexes
+firebase deploy --only firestore:rules
+
+═══════════════════════════════════════════════════════════
+
+AFTER LOGIN:
+
+✓ You'll be authenticated
+✓ Can deploy indexes
+✓ Can deploy rules
+✓ Can use all Firebase commands
+
+═══════════════════════════════════════════════════════════
+
+TROUBLESHOOTING:
+
+"Already logged in"
+→ Good! Just run: firebase deploy --only firestore:indexes
+
+"Browser didn't open"
+→ Copy the URL from terminal and paste in browser
+
+"Wrong account"
+→ firebase logout
+→ firebase login
+
+═══════════════════════════════════════════════════════════
+
+QUICK START:
+
+firebase login
+# Follow browser prompts
+firebase deploy --only firestore:indexes
+# Wait 2-5 minutes
+# Refresh browser
+# Done!
+
+═══════════════════════════════════════════════════════════

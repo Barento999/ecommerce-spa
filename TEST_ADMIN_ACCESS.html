@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test Admin Orders Access</title>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        query,
+        orderBy,
+        limit,
+      } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBuL9BRapc8CaLzCkny0oMLxsv24A3Kuio",
+        authDomain: "ecommerce-55491.firebaseapp.com",
+        projectId: "ecommerce-55491",
+        storageBucket: "ecommerce-55491.firebasestorage.app",
+        messagingSenderId: "578501587024",
+        appId: "1:578501587024:web:9458f4710b13dc6eb52155",
+        measurementId: "G-4ZXWQWK5XP",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
+
+      window.testLogin = async function () {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const output = document.getElementById("output");
+
+        try {
+          output.innerHTML = "Logging in...<br>";
+          const userCredential = await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+          output.innerHTML += `✓ Logged in as: ${userCredential.user.email}<br>`;
+          output.innerHTML += `User ID: ${userCredential.user.uid}<br><br>`;
+
+          // Get ID token to check admin claim
+          const idTokenResult = await userCredential.user.getIdTokenResult();
+          output.innerHTML += `Admin claim: ${
+            idTokenResult.claims.admin || "false"
+          }<br><br>`;
+
+          // Try to fetch orders
+          output.innerHTML += "Fetching orders...<br>";
+          const ordersQuery = query(
+            collection(db, "orders"),
+            orderBy("createdAt", "desc"),
+            limit(10)
+          );
+
+          const snapshot = await getDocs(ordersQuery);
+          output.innerHTML += `✓ Found ${snapshot.size} orders<br><br>`;
+
+          if (snapshot.size > 0) {
+            output.innerHTML += "Orders:<br>";
+            snapshot.forEach((doc) => {
+              const data = doc.data();
+              output.innerHTML += `- ${doc.id.substring(0, 8)}: ${
+                data.userEmail
+              } - $${data.total}<br>`;
+            });
+          } else {
+            output.innerHTML += "❌ No orders found!<br>";
+          }
+        } catch (error) {
+          output.innerHTML += `❌ Error: ${error.code}<br>`;
+          output.innerHTML += `Message: ${error.message}<br>`;
+          console.error("Full error:", error);
+        }
+      };
+
+      window.testWithoutLogin = async function () {
+        const output = document.getElementById("output");
+
+        try {
+          output.innerHTML = "Fetching orders without login...<br>";
+          const ordersQuery = query(
+            collection(db, "orders"),
+            orderBy("createdAt", "desc"),
+            limit(10)
+          );
+
+          const snapshot = await getDocs(ordersQuery);
+          output.innerHTML += `✓ Found ${snapshot.size} orders<br>`;
+        } catch (error) {
+          output.innerHTML += `❌ Error: ${error.code}<br>`;
+          output.innerHTML += `Message: ${error.message}<br>`;
+        }
+      };
+    </script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+      }
+      input {
+        padding: 8px;
+        margin: 5px;
+        width: 300px;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+      }
+      #output {
+        margin-top: 20px;
+        padding: 20px;
+        background: #f5f5f5;
+        border-radius: 5px;
+        font-family: monospace;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Test Admin Orders Access</h1>
+
+    <h2>Test 1: Login and Fetch</h2>
+    <div>
+      <input
+        type="email"
+        id="email"
+        placeholder="Email"
+        value="barentohashum11@gmail.com" />
+      <input type="password" id="password" placeholder="Password" value="" />
+      <button onclick="testLogin()">Login & Fetch Orders</button>
+    </div>
+
+    <h2>Test 2: Fetch Without Login</h2>
+    <button onclick="testWithoutLogin()">Fetch Orders (No Auth)</button>
+
+    <div id="output">Results will appear here...</div>
+
+    <h3>Instructions:</h3>
+    <ol>
+      <li>Enter your admin email and password</li>
+      <li>Click "Login & Fetch Orders"</li>
+      <li>Check if orders are fetched</li>
+      <li>Check browser console (F12) for detailed errors</li>
+    </ol>
+  </body>
+</html>

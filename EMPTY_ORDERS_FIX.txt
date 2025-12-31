@@ -1,0 +1,46 @@
+🔧 FIX FOR EMPTY ORDERS PAGE
+================================
+
+PROBLEM: The seed script was skipping order creation for existing users.
+
+SOLUTION: I've fixed the seed script. Now run these commands:
+
+1. Run the fixed seed script:
+   npm run seed-data
+
+   This will now create orders for the existing users!
+
+2. Deploy the indexes (if you haven't already):
+   firebase deploy --only firestore:indexes
+
+3. Wait 2-5 minutes for indexes to build
+
+4. Hard refresh your browser:
+   - Windows: Ctrl + Shift + R
+   - Mac: Cmd + Shift + R
+
+5. Check the orders page again!
+
+WHAT WAS FIXED:
+- The seed script now creates orders even when users already exist
+- It signs in as existing users to get their user IDs
+- Then creates 2-5 orders for each user
+
+EXPECTED RESULT:
+- You should see 10-25 orders in the admin orders page
+- Each of the 5 sample users will have 2-5 orders
+
+TEST IT:
+1. Go to: http://localhost:5173/admin/orders
+2. You should see orders listed
+3. Try filtering by status
+4. Try searching by email
+
+STILL EMPTY?
+Check Firebase Console to verify orders were created:
+https://console.firebase.google.com/project/ecommerce-55491/firestore/data/~2Forders
+
+If you see orders in Firebase but not in the app:
+- Wait for indexes to finish building (check Indexes tab)
+- Hard refresh browser
+- Check browser console (F12) for errors
