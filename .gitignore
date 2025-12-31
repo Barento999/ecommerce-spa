@@ -35,3 +35,4 @@ firebase-debug.*.log
 *.sln
 *.sw?
 *.md
+*.txt
