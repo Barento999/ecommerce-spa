@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+functions/node_modules/
 
 # Build output
 dist/
@@ -26,12 +27,11 @@ serviceAccountKey.json
 *.serviceAccount.json
 firebase-debug.log
 firebase-debug.*.log
+.firebaserc
 
 # Editor directories and files
-.vscode/*
-!.vscode/extensions.json
+.vscode/
 .idea/
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
@@ -39,5 +39,34 @@ firebase-debug.*.log
 *.sw?
 
 # OS files
-Thumbs.db
 .DS_Store
+Thumbs.db
+
+# Test files
+*.test.js
+*.spec.js
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Lock files (optional - uncomment if you want to ignore)
+# package-lock.json
+# yarn.lock
+
+# Build artifacts
+*.tsbuildinfo
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Misc
+.stylelintrc.json
+index.js
+src/test-styles.css
+src/assets/react.svg
+public/vite.svg
