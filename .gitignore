@@ -53,8 +53,9 @@ coverage/
 .cache/
 
 # Lock files (optional - uncomment if you want to ignore)
-# package-lock.json
-# yarn.lock
+package-lock.json
+yarn.lock
+package.json
 
 # Build artifacts
 *.tsbuildinfo
